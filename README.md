@@ -10,7 +10,6 @@ This Minesweeper-style game was created as a part of the FIAP course activity. I
 - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Instructions
 
