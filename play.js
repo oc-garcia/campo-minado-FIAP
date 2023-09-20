@@ -37,6 +37,22 @@ console.table(mineField);
 let roundColumn;
 let roundRow;
 let roundType;
+let gameOver = false;
+
+const checkWinCondition = () => {
+  for (let i = 0; i < mineField.length; i++) {
+    for (let j = 0; j < mineField[i].length; j++) {
+      if (mineField[i][j] === "-") {
+        if (!gameOver) {
+          newRound();
+        }
+      }
+    }
+  }
+  if (!gameOver) {
+    console.log("Congratulations! You WON!");
+  }
+};
 
 const newRound = () => {
   console.log("New round!");
@@ -68,21 +84,12 @@ const newRound = () => {
   };
   validateRoundInput();
 
-  const checkWinCondition = () => {
-    for (let i = 0; i < mineField.length; i++) {
-      for (let j = 0; j < mineField[i].length; j++) {
-        if (mineField[i][j] === "-") {
-          newRound();
-        }
-      }
-    }
-    console.log("Congratulations! You WON!");
-  };
-
   if (booleanField[roundRow][roundColumn] && roundType == "free") {
     mineField[roundRow][roundColumn] = "x";
     console.table(mineField);
-    return console.log("Hit a mine, game over =/");
+    gameOver = true;
+    console.log("Hit a mine, game over =/");
+    checkWinCondition();
   }
   if (booleanField[roundRow][roundColumn] && roundType == "mine") {
     mineField[roundRow][roundColumn] = "x";
@@ -108,10 +115,6 @@ const newRound = () => {
     mineField[roundRow][roundColumn] = "-";
     console.table(mineField);
     checkWinCondition();
-  }
-
-  if (checkWinCondition()) {
-    return;
   }
 };
 newRound();
