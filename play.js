@@ -1,4 +1,5 @@
 const ask = require("./functions/ask");
+const countAdjacentMines = require("./functions/countAdjacentMines");
 const layTable = require("./functions/layTable");
 
 // starting questions
@@ -29,7 +30,7 @@ validateInitialInput();
 let { booleanField, mineField } = layTable(grid, mineQuantity);
 
 console.log("=== MINE FIELD ===");
-console.table(booleanField);
+//console.table(booleanField);
 console.table(mineField);
 
 //round start
@@ -38,6 +39,7 @@ let roundRow;
 let roundType;
 
 const newRound = () => {
+  console.log("New round!");
   const validateRoundInput = () => {
     const validateRoundColumn = () => {
       roundColumn = ask("Choose a column?");
@@ -65,24 +67,52 @@ const newRound = () => {
     validateRoundType();
   };
   validateRoundInput();
-  console.log(booleanField[roundRow][roundColumn]);
+
+  const checkWinCondition = () => {
+    for (let i = 0; i < mineField.length; i++) {
+      for (let j = 0; j < mineField[i].length; j++) {
+        if (mineField[i][j] === "-") {
+          newRound();
+        }
+      }
+    }
+    console.log("Congratulations! You WON!");
+  };
+
   if (booleanField[roundRow][roundColumn] && roundType == "free") {
-    mineField = [...mineField, (mineField[roundRow][roundColumn] = "x")];
-    console.log(mineField);
+    mineField[roundRow][roundColumn] = "x";
+    console.table(mineField);
     return console.log("Hit a mine, game over =/");
   }
   if (booleanField[roundRow][roundColumn] && roundType == "mine") {
-    mineField = [...mineField, (mineField[roundRow][roundColumn] = "x")];
-    console.log(mineField);
-    newRound();
+    mineField[roundRow][roundColumn] = "x";
+    console.table(mineField);
+    checkWinCondition();
   }
   if (booleanField[roundRow][roundColumn] && roundType == "unflag") {
-    mineField = [...mineField, (mineField[roundRow][roundColumn] = "-")];
-    console.log(mineField);
-    newRound();
+    mineField[roundRow][roundColumn] = "-";
+    console.table(mineField);
+    checkWinCondition();
   }
-  console.log(mineField);
-  newRound();
+  if (!booleanField[roundRow][roundColumn] && roundType == "free") {
+    mineField[roundRow][roundColumn] = countAdjacentMines(roundRow, roundColumn, booleanField);
+    console.table(mineField);
+    checkWinCondition();
+  }
+  if (!booleanField[roundRow][roundColumn] && roundType == "mine") {
+    mineField[roundRow][roundColumn] = "x";
+    console.table(mineField);
+    checkWinCondition();
+  }
+  if (!booleanField[roundRow][roundColumn] && roundType == "unflag") {
+    mineField[roundRow][roundColumn] = "-";
+    console.table(mineField);
+    checkWinCondition();
+  }
+
+  if (checkWinCondition()) {
+    return;
+  }
 };
 newRound();
 

@@ -4,7 +4,6 @@ const layTable = (grid, mineQuantity) => {
 
   // table setup
   for (let i = 0; i < grid; i++) {
-    // Create a new innerBooleanField array for each row
     let innerBooleanField = [];
     let innerMineField = [];
 
@@ -25,7 +24,6 @@ const layTable = (grid, mineQuantity) => {
     randomIndexA = Math.floor(Math.random() * grid);
     randomIndexB = Math.floor(Math.random() * grid);
 
-    // Ensure the cell is not already a mine
     if (!booleanField[randomIndexA][randomIndexB]) {
       booleanField[randomIndexA][randomIndexB] = true;
       counter++;
